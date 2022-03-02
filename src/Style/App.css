@@ -17,3 +17,13 @@ body {
   max-width: 720px;
   margin: 0 auto;
 }
+
+.App_titleWarning {
+  margin: 8px 0px;
+  font-size: 32px;
+  font-weight: 400;
+  color: black;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+}
