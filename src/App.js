@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Form from './Components/Form/Form'
 import List from './Components/List/List'
 import './Style/App.css'
+import SelectGrey from './UI/SelectGrey/SelectGrey'
 
 const App = () => {
   let [posts, setPosts] = useState([
@@ -12,6 +13,7 @@ const App = () => {
     { id: 5, title: 'Poland', body: 'Country in Europe' },
     { id: 6, title: 'Greece', body: 'Country in Europe' },
   ])
+  let [selectedSort, setSelectedSort] = useState('')
 
   const removePost = (post) => {
     setPosts(posts.filter((p) => p.id !== post.id))
@@ -19,9 +21,23 @@ const App = () => {
   const addNewPost = (newPost) => {
     setPosts([...posts, newPost])
   }
+  const sortPosts = (sort) => {
+    setSelectedSort(sort)
+    setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])))
+  }
   return (
     <div className="App">
       <Form addPost_Func={addNewPost} />
+
+      <SelectGrey
+        defaultValue="Sorting"
+        onChange={sortPosts}
+        value={selectedSort}
+        options={[
+          { name: 'By description', value: 'body' },
+          { name: 'By name', value: 'title' },
+        ]}
+      />
 
       {posts.length ? (
         <List posts={posts} removePost={removePost} />

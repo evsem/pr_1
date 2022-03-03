@@ -1,2 +1,10 @@
 .selectGrey {
+  min-width: 152px;
+  background-color: transparent;
+  border: 2px solid grey;
+  border-radius: 3px;
+  font-family: 'Montserrat';
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 1px;
 }
