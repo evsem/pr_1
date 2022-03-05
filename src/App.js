@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react'
+import Filter from './Components/Filter/Filter'
 import Form from './Components/Form/Form'
 import List from './Components/List/List'
+import { usePosts } from './Hooks/usePosts'
 import './Style/App.css'
 import InputGrey from './UI/InputGrey/InputGrey'
 import SelectGrey from './UI/SelectGrey/SelectGrey'
@@ -14,8 +16,8 @@ const App = () => {
     { id: 5, title: 'Poland', body: 'Country in Europe' },
     { id: 6, title: 'Greece', body: 'Country in Europe' },
   ])
-  let [selectedSort, setSelectedSort] = useState('')
-  let [searchQuery, setSearchQuery] = useState('')
+  let [filter, setFilter] = useState({ sort: '', search: '' })
+  let searchedAndSelectedPosts = usePosts(posts, filter.sort, filter.search)
 
   const removePost = (post) => {
     setPosts(posts.filter((p) => p.id !== post.id))
@@ -23,41 +25,14 @@ const App = () => {
   const addNewPost = (newPost) => {
     setPosts([...posts, newPost])
   }
-
-  const sortedPosts = useMemo(() => {
-    if (selectedSort) {
-      return [...posts].sort((a, b) =>
-        a[selectedSort].localeCompare(b[selectedSort])
-      )
-    }
-    return posts
-  }, [selectedSort, posts])
-  const serachedAndSelectedPosts = useMemo(() => {
-    return sortedPosts.filter((post) =>
-      post.title.toLowerCase().includes(searchQuery)
-    )
-  }, [searchQuery, sortedPosts])
   return (
     <div className="App">
       <Form addPost_Func={addNewPost} />
 
-      <InputGrey
-        placeholder="Search"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <SelectGrey
-        defaultValue="Sorting"
-        onChange={setSelectedSort}
-        value={selectedSort}
-        options={[
-          { name: 'By description', value: 'body' },
-          { name: 'By name', value: 'title' },
-        ]}
-      />
+      <Filter filter={filter} setFilter={setFilter} />
 
-      {serachedAndSelectedPosts.length ? (
-        <List posts={serachedAndSelectedPosts} removePost={removePost} />
+      {searchedAndSelectedPosts.length ? (
+        <List posts={posts} removePost={removePost} />
       ) : (
         <h2 className="App_titleWarning">No posts</h2>
       )}
